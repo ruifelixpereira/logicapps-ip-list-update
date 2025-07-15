@@ -1,0 +1,19 @@
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore local settings
+local.settings.json
+
+# Ignore virtual environments
+.env/
+.venv/
+
+.git*
+.vscode
+__azurite_db*__.json
+__blobstorage__
+__queuestorage__
+scripts
+README.md
