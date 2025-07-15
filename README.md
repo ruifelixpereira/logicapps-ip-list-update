@@ -25,7 +25,7 @@ This solution leverages **Azure Functions** to automatically update the **allowe
 2. Queue-Triggered Update Function
 
    A second Azure Function, triggered by the queue message, performs the following:
-   - Retrieves the latest IP ranges for a specified Azure service tag (e.g., Dynamics365) and region using the Network Service Tags API.
+   - Retrieves the latest IP ranges for a specified Azure service tag (e.g., Dynamics365) and region using the Network Management Service Tags API.
    - Updates the Logic App’s access control configuration with the new IP ranges, ensuring only current, valid addresses are allowed.
 
 
@@ -105,7 +105,7 @@ Adjust these settings in your Function app environment:
 | Key                                              | Value                                         | Description                                                    |
 | ------------------------------------------------ | --------------------------------------------- | -------------------------------------------------------------- |
 | AzureWebJobsStorage                              | Storage Account connection string             | Used by the Function App to store data and use queues.         |
-| ALLOWED_IP_RANGES_UPDATE_TYPE                    | Choose one of these values `reset` or `merge` | Choose one to define the update behavior for allowed IP ranges. In case of `reset`, the existing IP ranges will be replaced with the new ones. In case of `merge`, the new IP ranges will be added to the existing ones, without duplicates. |
+| ALLOWED_IP_RANGES_UPDATE_TYPE                    | Choose one of these values `replace` or `merge` | Choose one to define the update behavior for allowed IP ranges. In case of `replace`, the existing IP ranges will be replaced with the new ones. In case of `merge`, the new IP ranges will be added to the existing ones, without duplicates. If not specified, `merge` is the default behaviour. |
 
 You can go directly to Azure Portal, or you can use Azure CLI to set these settings:
 

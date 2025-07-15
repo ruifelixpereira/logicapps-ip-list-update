@@ -78,7 +78,7 @@ You can define your Azure credentials and Logic App details in `local.settings.j
     "AZURE_TENANT_ID": "your-tenant-id",
     "AZURE_CLIENT_ID": "your-client-id",
     "AZURE_CLIENT_SECRET": "your-client-secret",
-    "ALLOWED_IP_RANGES_UPDATE_TYPE": "reset | merge" // Choose one
+    "ALLOWED_IP_RANGES_UPDATE_TYPE": "replace | merge" // Choose one
   }
 }
 ```

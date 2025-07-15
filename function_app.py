@@ -107,6 +107,9 @@ def update_logic_app(msg: func.QueueMessage) -> None:
         logging.warning(f"No IP ranges found for location {location}. Skipping Logic App update.")
         return
 
+    # Decide update type: merge or replace
+    update_type = os.environ.get("ALLOWED_IP_RANGES_UPDATE_TYPE", "merge").lower()
+
     try:
         credential = ClientSecretCredential(tenant_id, client_id, client_secret)
         client = LogicManagementClient(credential, subscription_id)
@@ -117,18 +120,22 @@ def update_logic_app(msg: func.QueueMessage) -> None:
         access_control = wf_dict.get("access_control", {})
 
         triggers = access_control.get("triggers", {})
-        triggers_allow_list = triggers.get("allowed_caller_ip_addresses", [])
-
         actions = access_control.get("actions", {})
-        actions_allow_list = actions.get("allowed_caller_ip_addresses", [])
 
-        # Add all new IP ranges, avoiding duplicates
-        for ip in new_ip_ranges:
-            ip_entry = {"address_range": ip}
-            if ip_entry not in triggers_allow_list:
-                triggers_allow_list.append(ip_entry)
-            if ip_entry not in actions_allow_list:
-                actions_allow_list.append(ip_entry)
+        if update_type == "replace":
+            # Replace the lists with new IP ranges
+            triggers_allow_list = [{"address_range": ip} for ip in new_ip_ranges]
+            actions_allow_list = [{"address_range": ip} for ip in new_ip_ranges]
+        else:
+            # Merge: add new IPs, avoid duplicates
+            triggers_allow_list = triggers.get("allowed_caller_ip_addresses", [])
+            actions_allow_list = actions.get("allowed_caller_ip_addresses", [])
+            for ip in new_ip_ranges:
+                ip_entry = {"address_range": ip}
+                if ip_entry not in triggers_allow_list:
+                    triggers_allow_list.append(ip_entry)
+                if ip_entry not in actions_allow_list:
+                    actions_allow_list.append(ip_entry)
 
         triggers["allowed_caller_ip_addresses"] = triggers_allow_list
         actions["allowed_caller_ip_addresses"] = actions_allow_list
@@ -145,7 +152,7 @@ def update_logic_app(msg: func.QueueMessage) -> None:
         }
 
         client.workflows.create_or_update(resource_group, logic_app_name, updated_workflow)
-        logging.info(f"New IP ranges added to Logic App access list via queue trigger.")
+        logging.info(f"IP ranges ({update_type}) applied to Logic App access list via queue trigger.")
 
     except Exception as e:
         logging.error(f"Failed to update Logic App from queue trigger: {e}")
