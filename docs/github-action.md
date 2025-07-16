@@ -43,4 +43,4 @@ If you push your changes to GitHub, the GitHub Action workflow will be triggered
 
 In the Azure Portal you can check the Function App functions that were deployed and are ready to use:
 
-
+![alt text](images/functions.png)

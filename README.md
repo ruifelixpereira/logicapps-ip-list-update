@@ -38,7 +38,9 @@ This solution leverages **Azure Functions** to automatically update the **allowe
 
 ## Deployment
 
-### Step 1. Setup Azure resources
+You need to create your Azure environment and deploy the Function App.
+
+### Step 1. Setup Azure environment and resources
 
 To create Azure resources, you can use the provided `scripts/create-azure-env.sh` file. Copy `template.env` to a new file named `.env` and customize the settings according to your environment.
 After this customization, just run the provided file in the `scripts` directory:
@@ -52,43 +54,20 @@ In the end you should have the following resources created:
 ![alt text](docs/images/resources.png)
 
 
-### Step 2. Deploy function app to Azure using GitHub Actions
+### Step 2. Deploy function app to Azure
 
-Use the provided GitHub Action workflow file `.github/workflows/azure-deploy.yml` that deploys the Function app in your environment.
+You have two options for deployment:
 
-#### 2.1. Create a Service principal to deploy Function app and configure Secrets in GitHub
+1. **Deploy using Azure CLI**: You can use the Azure CLI to deploy the function app. This method requires you to have the Azure CLI installed and configured on your machine.
 
-Run the provided script `scripts/prep-github-actions.sh` to create a Service Principal. The command should output a JSON object similar to this:
+    Make sure you are in the root of your function app (where `host.json` is located), then run:
 
-```json
-  {
-    "clientId": "<GUID>",
-    "clientSecret": "<GUID>",
-    "subscriptionId": "<GUID>",
-    "tenantId": "<GUID>",
-    (...)
-  }
-```
-Copy and paste the json response from above Azure CLI to your GitHub Repository > Settings > Secrets > Actions > Manage Environment secrets > Choose Environment `dev` > Environment secrets > Add environment secret > `AZURE_RBAC_CREDENTIALS`.
+    ```bash
+    # Replace <your_function_name> with the name of your function app
+    func azure functionapp publish <your_function_name>
+    ```
 
-![alt text](docs/images/action-secrets.png)
-
-
-#### 2.2. Customize GitHub Action
-
-In the GitHub Action workflow file, you can change these variables for your configuration:
-
-| Variable               | Value         | Description                                  |
-| ---------------------- | ------------- | -------------------------------------------- |
-| AZURE_FUNCTIONAPP_NAME | your-app-name | Set this to your function app name on Azure. |
-
-
-![alt text](image.png)
-
-
-#### 2.3. Commit and push your project to GitHub repository
-
-You should see a new GitHub workflow initiated in Actions tab.
+2. **Deploy using GitHub Actions**: You can use the provided GitHub Action workflow file `.github/workflows/azure-deploy.yml` that deploys the Function app in your environment. This method requires you to have a GitHub repository set up and the necessary secrets configured. Follow the steps provided in [GitHub Actions Setup](docs/github-action.md).
 
 
 ### Step 3. Assign roles and permissions to Function app
