@@ -83,6 +83,9 @@ In the GitHub Action workflow file, you can change these variables for your conf
 | AZURE_FUNCTIONAPP_NAME | your-app-name | Set this to your function app name on Azure. |
 
 
+![alt text](image.png)
+
+
 #### 2.3. Commit and push your project to GitHub repository
 
 You should see a new GitHub workflow initiated in Actions tab.
@@ -121,8 +124,11 @@ If you used the provided script `scripts/create-azure-env.sh`, these settings ar
 
 You can deploy two test Logic Apps using the provided script `scripts/deploy-test-logic-apps.sh`. This script will create two new Logic Apps in the specified resource group and location. You can customize the Logic App name in the script. After running the script, it will output the HTTP trigger URL for the Logic App.
 
-curl -X POST "https://prod-14.swedencentral.logic.azure.com:443/workflows/ab6d71d4eb124c96aba72d131ba0d2a8/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=LLsCEpdp3rRXZaKR-4svwz6k4iuFI6C4ZJ4ywxHMo5M" -H "Content-Type: application/json" -d '{"message": "Hello from curl!"}'
+```bash
+./scripts/deploy-test-logic-apps.sh
 
+curl -X POST "https://prod-14.swedencentral.logic.azure.com:443/workflows/ab6d71d4eb124c96aba72d131ba0d2a8/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=LLsCEpdp3rRXZaKR-4svwz6k4iuFI6C4ZJ4ywxHMo5M" -H "Content-Type: application/json" -d '{"message": "Hello from curl!"}'
+```
 
 ## Development
 
