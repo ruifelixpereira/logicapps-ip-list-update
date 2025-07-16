@@ -15,5 +15,6 @@ local.settings.json
 __azurite_db*__.json
 __blobstorage__
 __queuestorage__
+test
 scripts
 README.md
