@@ -116,6 +116,12 @@ az storage queue create --name "logicapps-to-update" --account-name $storageAcco
 # Get Storage account connection string
 STORAGE_CONNECTION_STRING=$(az storage account show-connection-string --name $storageAccountName --resource-group $resourceGroupName --query connectionString -o tsv)
 
+# Get the resource group ID
+RG_ID=$(az group show --name "$resourceGroupName" --query id -o tsv)
+
+# Grant Contributor on the resource group
+az role assignment create --assignee $spId --role "Contributor" --scope ${RG_ID}
+
 # Get tenant ID
 TENANT_ID=$(az account show --query tenantId -o tsv)
 

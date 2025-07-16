@@ -59,7 +59,6 @@ az ad sp create-for-rbac \
     --scopes /subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${resourceGroupName}/providers/Microsoft.Web/sites/${funcAppName} \
     --json-auth
 
-
 # Output
 echo "============================================================================="
 echo "Add the above JSON into a GitHub Actions secret named AZURE_RBAC_CREDENTIALS."

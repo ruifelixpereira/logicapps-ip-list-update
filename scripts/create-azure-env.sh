@@ -75,8 +75,6 @@ else
     echo "Storage account $storageAccountName already exists."
 fi
 
-
-
 #
 # Create Function App
 #
@@ -112,19 +110,11 @@ az role assignment create --assignee $FUNCAPP_ID --role "Storage Queue Data Cont
 #
 az storage queue create --name "logicapps-to-update" --account-name $storageAccountName
 
-
 #
 # Add default application settings to Function App
 #
-#az functionapp config appsettings set --name $funcAppName --resource-group $resourceGroupName --settings \
-#    LOGS_INGESTION_ENDPOINT="$LOG_INGESTION_ENDPOINT" \
-#    LOGS_INGESTION_RULE_ID="$LOG_INGESTION_RULE_ID" \
-#    LOGS_INGESTION_STREAM_NAME="$LOG_INGESTION_STREAM_NAME" \
-#    SNAPSHOT_SECONDARY_LOCATION="westeurope" \
-#    SNAPSHOT_RETRY_CONTROL_COPY_MINUTES="15" \
-#    SNAPSHOT_RETRY_CONTROL_PURGE_MINUTES="15" \
-#    SNAPSHOT_PURGE_PRIMARY_LOCATION_NUMBER_OF_DAYS="1" \
-#    SNAPSHOT_PURGE_SECONDARY_LOCATION_NUMBER_OF_DAYS="30"
+az functionapp config appsettings set --name $funcAppName --resource-group $resourceGroupName --settings \
+    ALLOWED_IP_RANGES_UPDATE_TYPE="merge"
 
 #
 # Grant additional permissions to the Function App assigned identity
@@ -135,4 +125,3 @@ RG_ID=$(az group show --name "$resourceGroupName" --query id -o tsv)
 
 # Grant Contributor on the resource group
 az role assignment create --assignee $FUNCAPP_ID --role "Contributor" --scope ${RG_ID}
-
