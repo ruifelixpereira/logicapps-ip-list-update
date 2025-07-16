@@ -32,7 +32,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Azure Login
-        uses: azure/login@v2
+        uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_RBAC_CREDENTIALS }}
 
